@@ -6,14 +6,19 @@ import img from './assets/images/image.jpg'
 let store = {
     user: { name: 'Student' },
     apod: '',
-    roverNames: [],
+    roverNames: ['Curiosity', 'Opportunity'],
     rovers: {},
-    selectedRover: '',
+    selectedRover: 'Curiosity',
     photos: {},
 }
 
 // add our markup to the page
 const root = document.getElementById('root')
+
+function onSelectTab (selectedTab) {
+    updateStore(store, { selectedRover: selectedTab })
+}
+window.onSelectTab = onSelectTab
 
 const formatDate = (date) => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -43,6 +48,7 @@ const App = (state) => {
                 <img class="banner-img" src=${img} />
                 <h1 class="banner-text">Explore the Mars Rovers</h1>
             </div>
+            ${Nav(roverNames, selectedRover)}
         </header>
         <main>
         </main>
@@ -59,31 +65,56 @@ window.addEventListener('load', () => {
     render(root, store)
 })
 
+// ------------------------------------------------------  COMPONENTS
+// Example of a pure function that renders infomation requested from the backend
+const ImageOfTheDay = (apod) => {
 
+    // If image does not already exist, or it is not from today -- request it again
+    const today = new Date()
+    const photodate = new Date(apod.date)
 
-const RoverData = (rovers, selectedRover, photos) => {
-    const rover = Object.keys(rovers).find(key => key === selectedRover)
-
-    if (!rover) {
-        getRoverData(selectedRover)
+    if (!apod || apod.date === today.getDate() ) {
+        getImageOfTheDay(store)
     }
 
-    const roverToDisplay = rovers[selectedRover];
+    // check if the photo of the day is actually type video!
+    if (apod.media_type === "video") {
+        return (`
+            <p>See today's featured video <a href="${apod.url}">here</a></p>
+            <p>${apod.title}</p>
+            <p>${apod.explanation}</p>
+        `)
+    } else {
+        return (`
+            <img src="${apod.image.url}" height="350px" width="100%" />
+            <p>${apod.image.explanation}</p>
+        `)
+    }
+}
 
-    if (roverToDisplay) {
-        return (
-            `
-                <section>
-                    <p><b>Launched:</b> ${formatDate(roverToDisplay.launch_date)}</p>
-                    <p><b>Landed:</b> ${formatDate(roverToDisplay.landing_date)}</p>
-                    <p><b>Status:</b> ${roverToDisplay.status.toUpperCase()}</p>
-                </section>
-                    
-                ${RoverPhotos(roverToDisplay.name, roverToDisplay.max_date, photos)}
-            `
-        )
-    } 
-    return `<div> Loading Data... </div>`
+const Tab = (name, selectedRover) => {
+    const className = name === selectedRover ? 'active' : 'inactive';
+
+    return `
+        <div class="nav-tab ${className}">
+            <a href="#" id="${name}" class="nav-link" onclick="onSelectTab(id)">${name}</a> 
+        </div>
+    `
+}
+
+
+const Nav = (roverNames, selectedRover) => {
+    return (
+        `
+            <nav class="nav-container">
+                ${roverNames.map((name) => {
+                    return `
+                        ${Tab(name, selectedRover)}
+                    `
+                }).join('')}
+            </nav>
+        `
+    )
 }
 
 // ------------------------------------------------------  API CALLS
