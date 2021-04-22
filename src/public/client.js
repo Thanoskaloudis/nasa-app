@@ -1,14 +1,14 @@
 import { set } from 'immutable'
 import './assets/stylesheets/resets.css'
 import './assets/stylesheets/index.css'
-import img from './assets/images/image.jpg'
+import img from './assets/images/background.jpg'
 
 let store = {
     user: { name: 'Student' },
     apod: '',
-    roverNames: ['Curiosity', 'Opportunity'],
+    roverNames: ['Perseverance', 'Curiosity', 'Spirit', 'Opportunity' ],
     rovers: {},
-    selectedRover: 'Curiosity',
+    selectedRover: 'Perseverance',
     photos: {},
 }
 
@@ -46,11 +46,12 @@ const App = (state) => {
         <header>
             <div class="banner">
                 <img class="banner-img" src=${img} />
-                <h1 class="banner-text">Explore the Mars Rovers</h1>
+                <h1 class="banner-text">Mars Rovers</h1>
             </div>
             ${Nav(roverNames, selectedRover)}
         </header>
         <main>
+            ${RoverData(rovers, selectedRover, photos)}
         </main>
         <footer>
             <h6>
@@ -117,6 +118,58 @@ const Nav = (roverNames, selectedRover) => {
     )
 }
 
+const RoverPhotos = (rover_name, max_date, photos) => {
+    const rover = Object.keys(photos).find(key => key === rover_name)
+
+    if (!rover) {
+        getLatestRoverPhotos(rover_name)
+    }
+
+    const roverPhotos = store.photos[rover_name]
+
+    if (roverPhotos) {
+        return `
+            <section>
+                <p>Check out some awasome photos from ${rover_name}. The following photos were taken on ${formatDate(max_date)}.</p>
+                <div class="photos">
+                    ${roverPhotos.map(photo => (
+                        `<img class="rover-img" src=${photo.img_src} width=300px/>` 
+                    )).join('')}
+                </div>
+            </section>
+        `
+    }
+    return `
+        <section>
+            <div> Loading Photos... </div>
+        </section>`
+}
+
+const RoverData = (rovers, selectedRover, photos) => {
+    const rover = Object.keys(rovers).find(key => key === selectedRover)
+
+    if (!rover) {
+        getRoverData(selectedRover)
+    }
+
+    const roverToDisplay = rovers[selectedRover];
+
+    if (roverToDisplay) {
+        return (
+            `
+                <section>
+                    <p><b>Launched:</b> ${formatDate(roverToDisplay.launch_date)}</p>
+                    <p><b>Landed:</b> ${formatDate(roverToDisplay.landing_date)}</p>
+                    <p><b>Status:</b> ${roverToDisplay.status.toUpperCase()}</p>
+                </section>
+                    
+                ${RoverPhotos(roverToDisplay.name, roverToDisplay.max_date, photos)}
+            `
+        )
+    } 
+    return `<div> Loading Data... </div>`
+}
+
 // ------------------------------------------------------  API CALLS
 
 // Example API call
@@ -139,6 +192,9 @@ const getRoverData = (rover_name) => {
                 })
             },
         ))
+        fetch(`http://localhost:3000/rovers`)
+        .then(res => res.json())
+        .then(() => console.log(res))
 }
 
 const getLatestRoverPhotos = (rover_name) => {
