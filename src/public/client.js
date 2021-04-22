@@ -4,7 +4,6 @@ import './assets/stylesheets/index.css'
 import img from './assets/images/background.jpg'
 
 let store = {
-    user: { name: 'Student' },
     apod: '',
     roverNames: ['Perseverance', 'Curiosity', 'Spirit', 'Opportunity' ],
     rovers: {},
