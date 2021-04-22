@@ -1,4 +1,4 @@
-/* -------------------  MOBILE  --------------------- */
+/* ---Mobile --- */
 
 body {
   display: flex;
@@ -7,6 +7,36 @@ body {
   min-height: 100vh;
 }
 
+.background{
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+}
+
+
+.banner {
+  position: absolute;
+  top: 5vmin;
+  left: 50%;
+  transform: translate(-50%);
+  width: 100vmin;
+}
+
+.banner-text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #e5e823;
+  font-size: 10vmin;
+  text-shadow: 5px 5px 12px #714e00;
+  font-weight: 800;
+}
+
+
 header {
   /* header styles */
   text-align: center;
@@ -14,7 +44,6 @@ header {
 
 main {
   flex: 1;
-  padding: 20px;
 }
 
 section {
@@ -24,23 +53,6 @@ section {
 
 .banner {
   position: relative;
-}
-
-.banner-img {
-  max-height: 300px;
-  width: 100%;
-  object-fit: cover;
-}
-
-.banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #e5e823;
-  font-size: 10vmin;
-  text-shadow: 5px 5px 12px #714e00;
-  font-weight: 800;
 }
 
 .nav-container {
@@ -91,7 +103,7 @@ footer {
   border-top: 1px dashed rgb(0, 0, 0);
 }
 
-/* -------------------  TABLET  --------------------- */
+/* ---TABLET  --- */
 @media (min-width: 768px) {
   .nav-tab {
     font-size: 18px;
@@ -108,7 +120,7 @@ footer {
   }
 }
 
-/* -------------------  DESKTOP  -------------------- */
+/* --- DESKTOP  --- */
 
 @media (min-width: 1224px) {
   .nav-tab {
@@ -126,8 +138,3 @@ footer {
   }
 }
 
-/* -------------------  LARGE SCREENS  -------------- */
-
-@media (min-width: 1824px) {
-
-}
