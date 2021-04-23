@@ -18,7 +18,7 @@ function onSelect () {
     const selectedRover = document.getElementById("select").value;
     updateStore(store, { selectedRover: selectedRover })
 }
-window.onSelect = onSelect
+window.onSelect = onSelect;
 
 const updateStore = (store, newState) => {
     store = Object.assign(store, newState)
@@ -44,20 +44,13 @@ const App = (state) => {
 
     return `
         <img class="background" src=${img} />
-        <header>
-        <div class="banner">
-        <h1 class="banner-text">Mars Rovers</h1>
+        <div class="header">
+        <h1 class="header-text">Mars Rovers</h1>
+        ${Select(roverNames, selectedRover)}
         </div>
-        ${Select(roverNames)}
-        </header>
         <main>
         ${RoverData(rovers, selectedRover, photos)}
         </main>
-        <footer>
-            <h6>
-                This page was made possible by the <a href="https://api.nasa.gov/">NASA API</a>.
-            </h6>
-        </footer>
     `
 }
 
@@ -65,29 +58,19 @@ window.addEventListener('load', () => {
     render(root, store)
 })
 
-const Tab = (name, selectedRover) => {
-    const className = name === selectedRover ? 'active' : 'inactive';
-
-    return `
-        <div class="nav-tab ${className}">
-            <a href="#" id="${name}" class="nav-link" onclick="onSelect()">${name}</a> 
-        </div>
-    `
-}
-
-
-const Select = (roverNames) => {
+const Select = (roverNames, selectedRover) => {
     return (
         `
                     <div class="select">
-                    <select id="select" onchange="onSelect">
-                    ${roverNames.map((name, index) => {
+                    <select id="select" onchange="onSelect()">
+                    ${roverNames.map((name) => {
                         return `
-                        <option value="${index}" value="${name}">${name}</option>
+                        <option selected="${selectedRover == name}" value="${name}">${name}</option>
                         `
                     })}
                     </select>
                     </div>
+
 
         `
     )
@@ -104,8 +87,8 @@ const RoverPhotos = (rover_name, max_date, photos) => {
 
     if (roverPhotos) {
         return `
-            <section>
-                <p>Check out some awasome photos from ${rover_name}. The following photos were taken on ${formatDate(max_date)}.</p>
+            <section class="rover-photo">
+                <p> *The following photos were taken on ${formatDate(max_date)}.</p>
                 <div class="photos">
                     ${roverPhotos.map(photo => (
                         `<img class="rover-img" src=${photo.img_src} width=300px/>` 
@@ -132,7 +115,7 @@ const RoverData = (rovers, selectedRover, photos) => {
     if (roverToDisplay) {
         return (
             `
-                <section>
+                <section class="rover-info">
                     <p><b>Launched:</b> ${formatDate(roverToDisplay.launch_date)}</p>
                     <p><b>Landed:</b> ${formatDate(roverToDisplay.landing_date)}</p>
                     <p><b>Status:</b> ${roverToDisplay.status.toUpperCase()}</p>
