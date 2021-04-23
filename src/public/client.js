@@ -18,6 +18,11 @@ function onSelect () {
     const selectedRover = document.getElementById("select").value;
     updateStore(store, { selectedRover: selectedRover })
 }
+
+function selectElement(value, valueToSelect) {    
+    let element = document.getElementById(value);
+    element.value = valueToSelect;
+}
 window.onSelect = onSelect;
 
 const updateStore = (store, newState) => {
@@ -27,6 +32,7 @@ const updateStore = (store, newState) => {
 
 const render = async (root, state) => {
     root.innerHTML = App(state)
+    selectElement("select", state.selectedRover);
 }
 
 const formatDate = (date) => {
