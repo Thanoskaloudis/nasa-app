@@ -14,12 +14,12 @@ let store = {
 // add our markup to the page
 const root = document.getElementById('root')
 
-function onSelect () {
+const onSelect = ()=> {
     const selectedRover = document.getElementById("select").value;
     updateStore(store, { selectedRover: selectedRover })
 }
 
-function selectElement(value, valueToSelect) {    
+const selectElement = (value, valueToSelect)=> {    
     let element = document.getElementById(value);
     element.value = valueToSelect;
 }
@@ -41,7 +41,7 @@ const formatDate = (date) => {
     const year = dateArr[0];
     const month = months[Number(dateArr[1])-1];
     const day = dateArr[2];
-    return `${month} ${day} ${year}`;
+    return `${day} / ${month} / ${year}`;
 }
 
 // create content
